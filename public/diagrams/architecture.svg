@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 410" role="img" aria-labelledby="title desc">
+<title id="title">Decision workbench application boundary</title><desc id="desc">Browser inputs go to a stateless Python API using authoritative economics. A versioned result snapshot and exports preserve inputs, outputs and labels. Optional forecasting, LLM, Convex and n8n integrations remain off.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#18776e"/></marker></defs>
+<rect width="800" height="410" rx="20" fill="#f6f3eb"/>
+<g font-family="Arial,sans-serif" fill="#152e40"><text x="32" y="40" font-size="15" letter-spacing="2">DETERMINISTIC APPLICATION BOUNDARY</text><text x="32" y="77" font-size="25" font-weight="700">One calculation authority. A reviewable result.</text></g>
+<g fill="none" stroke="#18776e" stroke-width="3" marker-end="url(#arrow)"><path d="M235 166H289"/><path d="M510 166H565"/><path d="M665 224V268H449"/></g>
+<g font-family="Arial,sans-serif" fill="#152e40" text-anchor="middle">
+<rect x="32" y="119" width="203" height="105" rx="12" fill="#fff" stroke="#c5cfcc"/><text x="133" y="158" font-size="23">Browser</text><text x="133" y="188" font-size="16">Labeled scenario inputs</text><text x="133" y="210" font-size="14">Human-owned decisions</text>
+<rect x="293" y="119" width="217" height="105" rx="12" fill="#152e40"/><text x="401" y="152" font-size="22" fill="#fff">Stateless Python API</text><text x="401" y="183" font-size="16" fill="#d8ebe5">Validate → economics</text><text x="401" y="208" font-size="14" fill="#d8ebe5">Authoritative calculation</text>
+<rect x="569" y="119" width="199" height="105" rx="12" fill="#dceee7"/><text x="668" y="158" font-size="22">Result snapshot</text><text x="668" y="189" font-size="16">Inputs + outputs + labels</text><text x="668" y="211" font-size="14">Version held for review</text>
+<rect x="294" y="242" width="155" height="55" rx="10" fill="#fff" stroke="#c5cfcc"/><text x="371" y="277" font-size="21">Export</text>
+<rect x="32" y="326" width="736" height="55" rx="10" fill="#fff" stroke="#c5cfcc" stroke-dasharray="5 4"/><text x="400" y="360" font-size="17">OFF · Forecasts · LLM · Convex · n8n — pending explicit gates</text>
+</g></svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 460" role="img" aria-labelledby="title desc">
+<title id="title">Fictional heat and power teaching boundary</title><desc id="desc">Gas supplies combined heat and power and a boiler. CHP and grid supply electrical service. CHP and boiler supply heat service. Compare alternatives with matching service and product tonnes; this is not a Henkel plant schematic.</desc>
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#18776e"/></marker></defs>
+<rect width="800" height="460" rx="20" fill="#f6f3eb"/>
+<g font-family="Arial,sans-serif" fill="#152e40"><text x="32" y="40" font-size="15" letter-spacing="2">FICTIONAL TEACHING BOUNDARY</text><text x="32" y="76" font-size="25" font-weight="700">Equal service. Different supply choices.</text></g>
+<g fill="none" stroke="#18776e" stroke-width="3" marker-end="url(#arrow)"><path d="M175 170H268"/><path d="M200 170V300H268"/><path d="M440 154H530V174H588"/><path d="M440 190H502V305H588"/><path d="M440 308H588"/><path d="M440 390H555V208H588"/></g>
+<g font-family="Arial,sans-serif" text-anchor="middle" fill="#152e40">
+<rect x="32" y="138" width="143" height="65" rx="10" fill="#fff" stroke="#c5cfcc"/><text x="103" y="178" font-size="21">Gas</text>
+<rect x="272" y="130" width="168" height="84" rx="10" fill="#152e40"/><text x="356" y="164" font-size="24" fill="#fff">CHP</text><text x="356" y="192" font-size="15" fill="#d8ebe5">Heat + electricity</text>
+<rect x="272" y="273" width="168" height="68" rx="10" fill="#fff" stroke="#c5cfcc"/><text x="356" y="315" font-size="22">Boiler</text>
+<rect x="272" y="362" width="168" height="55" rx="10" fill="#fff" stroke="#c5cfcc"/><text x="356" y="397" font-size="20">Grid electricity</text>
+<rect x="592" y="138" width="175" height="95" rx="10" fill="#dceee7"/><text x="679" y="178" font-size="21">Electrical</text><text x="679" y="207" font-size="21">service</text>
+<rect x="592" y="273" width="175" height="68" rx="10" fill="#dceee7"/><text x="679" y="315" font-size="21">Heat service</text>
+<text x="400" y="446" font-size="14">Losses / export terms / heat quality must be included in a real boundary.</text>
+</g></svg>
