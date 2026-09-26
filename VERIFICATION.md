@@ -1,6 +1,6 @@
 # Verification — 26 September 2026
 
-This record separates executed local checks from remaining release gates. It is not a hiring score, a customer savings validation or production-safety certification.
+This record distinguishes local implementation checks, actual hosted verification and remaining limitations. It is not a hiring score, a customer savings validation or production-safety certification.
 
 | Check | Actual result |
 |---|---|
@@ -14,19 +14,33 @@ This record separates executed local checks from remaining release gates. It is 
 | Live checks view | 44 actual server assertions (34 engine + 10 adapter parity cases) executed and displayed passed. This is a narrower scope than the whole release. |
 | Automated Playwright suite | **12/12 passed on Linux GitHub Actions**, including all fixture API/UI/download parity cases, delayed-response staleness, injected API failure, input validation and mobile layout. The initial macOS attempt was blocked before page execution; CI resolved that environment limitation. |
 | Native download delivery | Confirmed for all seven fixtures on the final formatted UI: 14 JSON/Markdown files were downloaded. Their content matched the visible previews; each Markdown file exactly matched the Python renderer applied to the downloaded JSON. The earlier event timeout was a browser-control notification limitation, not a failed file download. |
-| Deployment | Not deployed. Vercel CLI reported logged out. Hosting destination and access still need to be established. |
+| Deployment | **Live and verified** at [the public workbench](https://henkel-energy-decision-workbench.vercel.app); both Python functions, static assets, headers and ordinary reviewer access passed unauthenticated checks. |
+| Hosted release suite | [Run 36246111118](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36246111118) passed **22 HTTP/API/export smoke checks and 12/12 browser tests** against the production URL. Includes seven API/UI/JSON/Markdown cases, validation, negative results, infeasibility, stale responses and mobile layout. |
 | GitHub remote | Published to the owner-confirmed public [repository](https://github.com/harshjoshi23/henkel-energy-decision-workbench). Implementation commit `fff94133b1eaab6177e473578b7a6fc64960fa26` passed [CI run 36244908051](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36244908051). |
 
 The seven browser-observed signed values were C03: `6`, `-22`, `-1.5`, and `null` for the infeasible switch; C01: `0.34`, `-0.11`, and `0`. For each, the JSON preview and Markdown preview preserved the same result ID and metric. Negative C03 switches retained baseline A with zero incremental policy value.
 
-## Reproduce and finish release verification
+## Deployment identity and repeatability
+
+- Public URL: https://henkel-energy-decision-workbench.vercel.app
+- Immutable deployment: https://henkel-energy-decision-workbench-mh1au3ouh.vercel.app
+- Vercel deployment ID: `dpl_86wWt4JGDpcv9ko81KNq2KLd9SmW`; personal workspace `harshjoshi23s-projects`.
+- Deployed source: `5424dc53fd12450417750c7c7d11c652e9f98d00`; generated `dist` is excluded from uploads and rebuilt on hosting. Both Python functions use Python 3.12.
+- Hosted test revision: `fa31486b11bfc7c70828413e0a94b9c107e67301`. Later test/documentation commits do not change the deployed application. The smoke checker verifies the hosted engine, adapter and evidence hashes against the checkout.
+- First deployment was automatically assigned to production by Vercel and verified there. No prior preview promotion is claimed.
+- GitHub automatic deployment connection failed; publishing source and direct CLI deployment succeeded. Future pushes do not update the live app until the Git integration is connected or a new CLI deployment is made.
+- Render remains reserved for future forecasting jobs by owner choice. No Render resources were created.
+
+## Reproduce release verification
 
 Follow the root README commands. Linux CI successfully ran the actual browser suite: 12 tests passed in 8.0 seconds, alongside the 29 Python tests, 34 engine assertions and production build. It compares downloaded JSON/Markdown with the API response and exercises delayed requests, API failure, negative prices and mobile layout. The macOS launch restriction remains specific to that local environment.
 
-After an authorized Vercel preview exists, run the same suite with `PLAYWRIGHT_BASE_URL` set to that URL. Confirm public reviewer access, Python function imports, static assets, security headers and calculation/export behavior. Do not describe the app as live before that smoke check. The local build has not validated Vercel packaging or hosting-scale behavior.
+The public hosted suite passed in [run 36246111118](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36246111118): 22 smoke checks and 12 browser tests (8.7 seconds). The earlier [run 36245836454](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36245836454) was **11/12**, because the delayed-response test ended before its route completed and leaked a teardown error into the next test. The test now waits until a response is held, edits inputs, releases it and waits for route completion before checking that the UI is still stale. No failure was ignored and no application code changed. [Local CI at the corrected test revision also passed](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36245950589).
+
+Run `python3 -B scripts/smoke_hosted.py --base-url https://henkel-energy-decision-workbench.vercel.app` and `PLAYWRIGHT_BASE_URL=https://henkel-energy-decision-workbench.vercel.app npm run test:e2e`, or dispatch **Verify public deployment** in GitHub Actions. The smoke test uses synthetic requests, requires no credentials, checks HTTP headers and fingerprints, and compares server Markdown to the authoritative renderer. Hosted packaging is verified; hosting capacity remains untested.
 
 No customer data, trained forecast, LLM, private workspace or external automation is enabled; their corresponding evaluations are not applicable, not passed. Full assistive-technology testing, load testing, a formal security audit and real plant feasibility remain outside the executed checks.
 
 ## Independent review
 
-A separate verifier checked the frozen assessment baseline (34 economics checks, 14 publication/tool tests, zero repository-check errors or warnings, identical source/release/staging/manifest bytes). It also independently passed 21 app calculation/export tests and TypeScript checking; its sandbox blocked real socket tests. The coordinator's 29-test HTTP-inclusive run is distinguished above. Independent review found no material defect in the local implementation; scoped score **9/10**. The verifier ran 34 engine checks, 21 calculation/export tests, TypeScript checking and 80 separately recomputed Decimal scenarios; its HTTP setup was sandbox-blocked. Download delivery was subsequently confirmed by the coordinator for all seven fixtures on the final formatted UI. Linux CI subsequently passed all automated browser cases on the implementation commit. Actual Vercel deployment and smoke tests remain the outstanding hosting gate; the local review score is not a deployment rating.
+A separate verifier checked the frozen assessment baseline (34 economics checks, 14 publication/tool tests, zero repository-check errors or warnings, identical source/release/staging/manifest bytes). It also independently passed 21 app calculation/export tests and TypeScript checking; its sandbox blocked real socket tests. The coordinator's 29-test HTTP-inclusive run is distinguished above. Independent review found no material defect in the local implementation; scoped score **9/10**. The verifier ran 34 engine checks, 21 calculation/export tests, TypeScript checking and 80 separately recomputed Decimal scenarios; its HTTP setup was sandbox-blocked. Download delivery was subsequently confirmed by the coordinator for all seven fixtures on the final formatted UI. Linux CI subsequently passed all automated browser cases on the implementation commit. The deployment follow-up independently reviewed the upload exclusions, smoke checker, hosted workflow and test-race correction. Its environment could not perform a live network fetch, so remote results are attributed to the coordinator and GitHub Actions, not presented as an independent live rerun. The historical local review score is not a production-safety rating.

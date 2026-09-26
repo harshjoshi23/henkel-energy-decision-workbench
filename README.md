@@ -4,6 +4,8 @@ An independent companion to a RIZM / Henkel Düsseldorf assessment. Explore a co
 
 **All modeled inputs and outputs are synthetic. This is not RIZM software, a Henkel digital twin, an energy audit, or validated customer savings. There is no connection to a plant, trading account or assessment portal.** The reviewed six-file assessment is a separate, independently readable deliverable; this repository adds an interactive demonstration.
 
+**[Open the live workbench](https://henkel-energy-decision-workbench.vercel.app)** · [Hosted verification](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36246111118) · [Release record](VERIFICATION.md)
+
 ## Start locally
 
 Use Node.js 22.12+ (tested with 22.23.1), npm and Python 3.12+ (standard library only). Python 3.12 is selected for Vercel. No database, API key or model-provider account is needed.
@@ -122,12 +124,16 @@ See [VERIFICATION.md](VERIFICATION.md) for actual executed results and remaining
 
 `vercel.json` configures the Vite build and two stdlib Python functions, with security headers and bounded function duration. Python 3.12 is pinned through `.python-version`. No secrets are required. Ignored `.vercel/` files belong to the chosen local hosting account, not the public repository.
 
-After confirming the intended GitHub account, new repository name/visibility and Vercel project/team:
+The live project is `henkel-energy-decision-workbench` in the owner-confirmed personal workspace `harshjoshi23s-projects`. Both Python functions and the public UI were verified without authentication. Vercel assigned the first deployment to production automatically. It was then tested in place; this was not a preview promotion.
+
+GitHub auto-connection failed through the hosting CLI; the app was deployed successfully through the CLI. A Git push currently runs CI but does **not** automatically update hosting. The owner can connect this exact repository under the project’s Git settings later. Do not confuse CI success with a new deployment.
+
+For future changes, use the existing linked project:
 
 ```sh
 npx vercel@60.1.3 login
-npx vercel@60.1.3 link
-npx vercel@60.1.3 deploy
+npx vercel@60.1.3 link --project henkel-energy-decision-workbench --scope harshjoshi23s-projects
+npx vercel@60.1.3 deploy --scope harshjoshi23s-projects
 ```
 
 Review the preview deployment and run the browser suite against its URL:
@@ -136,7 +142,16 @@ Review the preview deployment and run the browser suite against its URL:
 PLAYWRIGHT_BASE_URL=https://your-approved-preview.vercel.app npm run test:e2e
 ```
 
-Only after preview verification, promote or deploy production. If preview protection blocks ordinary reviewers or tests, resolve access in the authorized project settings; do not publish access tokens in URLs. Check both Python endpoints and the actual exports, not just the landing page. A static-only host cannot run this app's economics API.
+To repeat checks on the current public deployment:
+
+```sh
+python3 -B scripts/smoke_hosted.py --base-url https://henkel-energy-decision-workbench.vercel.app
+PLAYWRIGHT_BASE_URL=https://henkel-energy-decision-workbench.vercel.app npm run test:e2e
+```
+
+The manual **Verify public deployment** GitHub workflow runs these same checks without secrets. The passing hosted run contains 22 HTTP/API/export smoke checks and all 12 browser tests. The original hosted run found a delayed-request teardown race in the test; the corrected test waits for completion before asserting stale UI state, and the full rerun passed.
+
+For later releases, only after preview verification, promote or deploy production. If preview protection blocks ordinary reviewers or tests, resolve access in the authorized project settings; do not publish access tokens in URLs. Check both Python endpoints and the actual exports, not just the landing page. A static-only host cannot run this app's economics API.
 
 Use Vercel's project deployment history / rollback to restore the last independently checked deployment if a later version fails. For the first release, remove the public alias or stop sharing the demo if no earlier checked deployment exists. No database migration or plant action needs reversing. Deployment status and URLs are recorded only when actually established in `VERIFICATION.md`.
 
@@ -154,15 +169,19 @@ engine/economics.md          Matching generated trace and ten-candidate rational
 engine/adapter.py            Strict API contract, snapshots, traces and exports
 evidence/sources.md         Approved public source extract
 public/diagrams/             Accessible SVG energy and software diagrams
-scripts/                    Local two-process dev runner and loopback API server
+scripts/                    Local dev/API runners and public deployment smoke checker
 tests/                      Python/HTTP checks and browser parity tests
-.github/workflows/verify.yml     Reproducible Linux CI, no deployment permissions
+.github/workflows/          Local CI and manual hosted checks; no deployment permissions
 package.json / package-lock.json   Pinned frontend and test dependencies
 vercel.json / .python-version     Deployment/runtime configuration
 .env.example / .gitignore / .vercelignore   Safe configuration and publication exclusions
 ```
 
 The full research repository, private collaborator notes, correspondence, archives, third-party research runtime, agent transcripts and original Git history are deliberately absent. Reusable reasoning is retained as concise rationale, source records, code, tests and this handover-friendly map.
+
+## Render and future compute
+
+Vercel remains the live host. Render is reserved for future forecasting or evaluation jobs once the decision/data gates below are met. No Render service, second runtime or paid resource was created for this release. Adding another host is not required to review the current workbench. Any future worker must preserve the same Python authority, versioned input/output contract, human approval and measured evaluation gates.
 
 ## What comes next, if evidence justifies it
 
