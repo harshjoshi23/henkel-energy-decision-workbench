@@ -2,6 +2,18 @@
 
 This record distinguishes local implementation checks, actual hosted verification and remaining limitations. It is not a hiring score, a customer savings validation or production-safety certification.
 
+## Final preparation pass
+
+The fresh hosted [run 36248489881](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36248489881), at test revision `9ae50108425cc18e7216bb308a1edf197f2f4993`, passed **22 smoke checks and all 12 browser tests** (7.7 seconds for the browser suite). It captured the two actual synthetic-app screenshots now used by the README. This rerun is separate from the earlier evidence below.
+
+The deployed runtime remains source `5424dc53fd12450417750c7c7d11c652e9f98d00`. The later test and README commits do not change runtime code. A fresh public fetch compared both deployed JavaScript/CSS assets and both diagrams with the local build: all four matched byte-for-byte. No unnecessary redeployment was performed for documentation changes.
+
+A bounded independent security review checked the six-commit history at `1e4bc78` (42 unique blobs), followed by five changed blobs in `9ae5010` and `82511d9`. Configured secret/private-path patterns found no matches, and the two new screenshots were visually checked for private content. The review did not read local secret stores or environment contents. Its 21 unit tests and 12 additional in-memory handler probes passed. The reviewer could not rerun live network or socket checks in its environment; hosted checks above ran in GitHub Actions. A fresh `npm audit --json` reported zero known vulnerabilities at the time of this pass.
+
+This is a scoped review, not proof of absolute security. Public abuse/rate/spend controls and hosting-log retention were not verified. The app has no database, but that does not establish that hosting infrastructure retains no request data. Use fictional inputs only. The confirmation checkbox is not authentication, and content hashes are not signatures or proof that inputs are true. No formal penetration test, capacity test or comprehensive accessibility audit was performed.
+
+The frozen six-file assessment remains a separate, byte-identical release. Its earlier app-status statement belongs to that edition; the current README describes this later companion. The public role page was reviewed previously, but a separate detailed scorecard was not recovered or claimed as read. The owner supplies the assessment repository and optional video links when available.
+
 | Check | Actual result |
 |---|---|
 | Frozen assessment economics | 34 embedded checks passed; copied engine and saved trace match the reviewed assessment bytes. |
