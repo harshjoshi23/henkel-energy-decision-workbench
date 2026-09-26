@@ -22,3 +22,10 @@ jobs:
       - run: python3 -B scripts/smoke_hosted.py --base-url "$PLAYWRIGHT_BASE_URL"
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: success()
+        with:
+          name: verified-app-screenshots
+          path: test-results/*.png
+          if-no-files-found: error
+          retention-days: 7

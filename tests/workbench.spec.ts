@@ -85,6 +85,13 @@ for (const c of [
     expect(data.markdown).toContain(data.snapshot.id);
     if (c.raw && c.raw.startsWith("-"))
       await expect(work(page).getByTestId("policy-value")).toHaveText("0.00");
+    if (c.preset === "Base switch") {
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      await page.getByRole("heading", { name: "A decision you can inspect" }).scrollIntoViewIfNeeded();
+      await page.screenshot({ path: "test-results/workbench-result.png" });
+      await page.getByRole("heading", { name: "Heat and power. One decision boundary." }).scrollIntoViewIfNeeded();
+      await page.screenshot({ path: "test-results/workbench-overview.png" });
+    }
   });
 }
 test("empty, input validation, stale result and reapproval", async ({
