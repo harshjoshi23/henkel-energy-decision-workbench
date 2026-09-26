@@ -153,8 +153,13 @@ test("in-flight response cannot replace an edited revision", async ({
   const barrier = new Promise<void>((resolve) => {
     release = resolve;
   });
+  let markFetched: () => void = () => {};
+  const fetched = new Promise<void>((resolve) => {
+    markFetched = resolve;
+  });
   await page.route("**/api/calculate", async (route) => {
     const result = await route.fetch();
+    markFetched();
     await barrier;
     await route.fulfill({ response: result });
   });
@@ -166,8 +171,11 @@ test("in-flight response cannot replace an edited revision", async ({
   await expect(work(page).getByRole("status")).toContainText(
     "Validating inputs",
   );
+  await fetched;
   await work(page).getByLabel("Fuel price", { exact: true }).fill("70");
   release();
+  // Finish the delayed route before teardown and before checking final UI state.
+  await page.unrouteAll({ behavior: "wait" });
   await expect(
     work(page).getByText("No result has been calculated"),
   ).toBeVisible();
