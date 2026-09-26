@@ -1,10 +1,45 @@
 # Energy Decision Workbench
 
-An independent companion to a RIZM / Henkel Düsseldorf assessment. Explore a coupled heat-and-electricity decision (C03) and a separate residual-dryer comparison (C01), inspect the arithmetic, and export the exact result you reviewed.
+**How would you decide whether a factory should change its energy supply before you have its operating data?**
 
-**All modeled inputs and outputs are synthetic. This is not RIZM software, a Henkel digital twin, an energy audit, or validated customer savings. There is no connection to a plant, trading account or assessment portal.** The reviewed six-file assessment is a separate, independently readable deliverable; this repository adds an interactive demonstration.
+This companion to a RIZM / Henkel Düsseldorf take-home makes that starting point tangible. The assessment uses public evidence to choose decisions worth investigating. The app lets a reviewer change clearly fictional assumptions, inspect the resulting cost trade-off, and see when changing the baseline would lose money or fail a constraint.
 
-**[Open the live workbench](https://henkel-energy-decision-workbench.vercel.app)** · [Hosted verification](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36246111118) · [Release record](VERIFICATION.md)
+> Heat and electricity share a system. Their costs need the same decision boundary.
+
+**[Open the live app](https://henkel-energy-decision-workbench.vercel.app/)** · [Assessment entry point](#assessment-entry-point) · [Five-minute walkthrough](#reviewer-walkthrough) · [Architecture](#architecture) · [Verification](VERIFICATION.md)
+
+![Actual deployed workbench showing a synthetic coupled-energy result](docs/images/workbench-result.png)
+
+*Actual screenshot of the deployed app. Every modeled value is synthetic; the screen demonstrates the method, not validated Henkel savings.*
+
+## The decision behind the demonstration
+
+| Choice | Plain-English reason |
+|---|---|
+| **Coupled heat and electricity leads (C03)** | Public evidence describes a shared energy system. A change in heat supply can also change fuel use and electricity purchases. Comparing the whole external bill avoids optimizing one part while making the overall choice worse. Current operating freedom remains unknown. |
+| **Residual dryer improvement is a separate comparison (C01)** | Existing dryer control is already part of the baseline. The question is whether a remaining, controllable gap exists. This narrower investigation is useful if the coupled case is blocked, but its benefits cannot simply be added to C03. |
+| **Forecasting is deferred (C02)** | A forecast is useful only when an authorized decision needs an unknown future input. That decision and suitable operating data have not been established here. There is no trained model or accuracy claim. |
+| **One transparent calculator owns the numbers** | Python's Decimal arithmetic produces the costs, comparisons and exports. The interface displays them. A reviewer can trace a conclusion to its inputs and reproduce it without relying on generated prose. |
+
+The documented decision trail also keeps commissioned heat export (C04) inside the coupled case and treats commercial terms (C07) as a dependency. The [ten-candidate rationale](engine/economics.md#candidate-register) explains what was retained or deferred and what evidence would reopen a case.
+
+**Scope:** this is an independent synthetic demonstration, not RIZM software, a Henkel digital twin, an energy audit or a plant/trading connection. No live LLM runs in the calculation path. The assessment remains readable without the app.
+
+## Assessment entry point
+
+For the take-home itself, start with **README.md in the separately supplied six-file assessment package**, then **writeup.md**. That package also contains **economics.xlsx**, **economics.py**, **economics.md** and **sources.md**. The written argument identifies the use cases, one first-visit data request and one stakeholder; the spreadsheet and code expose the method.
+
+This public repository is the companion application. Its [authoritative engine](engine/economics.py), [calculation trace and candidate rationale](engine/economics.md), and [dated source records](evidence/sources.md) are available here. The separate assessment-repository URL and optional video have not been supplied, so no placeholder links are presented. The original assessment edition predates the companion app; its calculations remain unchanged.
+
+## Reviewer walkthrough
+
+1. **Coupled utilities:** choose **Base switch**, read the units and fixed service, accept the fictional inputs and calculate. The question is whether the same useful heat, electricity and product output cost less under the alternative.
+2. Choose **Higher power price**. The signed loss stays visible and the toy policy keeps the baseline. Choose **Infeasible switch** to see why an apparently attractive price cannot make an unavailable action valid.
+3. **Residual dryer:** inspect a separate fictional residual improvement. Existing automatic control is the baseline. This comparison is not added to the coupled result.
+4. **Evidence & choices** explains support and unknowns. **How it works** shows the teaching boundary and software architecture. **Verification** executes the actual server-side arithmetic checks.
+5. Export **JSON** or **Markdown** to take the exact reviewed result with you. Editing an input resets acceptance and makes the old result stale; exports stay disabled until you calculate the new scenario.
+
+The first-visit priority is **one existing utilities operating/dispatch report with its existing definitions**, and **the site utilities / energy operations owner**. If commercial rights determine whether any action is possible, that evidence can replace the report as the first request. Do not bundle every desired dataset into “one request.”
 
 ## Start locally
 
@@ -29,18 +64,6 @@ npm run preview
 ```
 
 Open `http://127.0.0.1:4173`. Do not expose the development servers to the public internet.
-
-## Reviewer walkthrough
-
-1. **Coupled utilities:** load “Base switch”, read the fixed service and units, accept the fictional assumptions, and calculate.
-2. Inspect the signed change, the selected toy policy, cost chart, sensitivity and exact trace. “Higher power price” preserves a losing switch's negative value while retaining baseline A. “Infeasible switch” shows no admissible switching value.
-3. Change an input. Acceptance resets, the previous result is marked stale, and exports are disabled until you recalculate.
-4. **Residual dryer:** start with unknown inputs or load a fictional residual example. Existing automatic control is the baseline. No absolute bill is fabricated and this value must not be added to C03.
-5. **Evidence & choices:** read dated public evidence, what it supports and what remains unknown. **How it works** separates the physical teaching boundary from the software architecture.
-6. **Verification:** execute the actual server-side economics and adapter checks. Their scope is arithmetic, not an assertion that every browser/security/plant test has passed.
-7. Export JSON and Markdown. Both come from the same response; export does not recalculate or call an LLM. JSON retains exact decimal strings, source and method fingerprints, checks and input-confirmation metadata.
-
-The first-visit priority is **one existing utilities operating/dispatch report with its existing definitions**, and **the site utilities / energy operations owner**. If commercial rights determine whether any action is possible, that evidence can replace the report as the first request. Do not bundle every desired dataset into “one request.”
 
 ## Decisions and economic boundaries
 
