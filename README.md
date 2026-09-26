@@ -114,7 +114,7 @@ npm run test:e2e
 
 The browser suite compares the API result, visible value, downloaded JSON and downloaded Markdown for all seven primary fixtures. It additionally exercises stale acceptance, missing/zero values, delayed responses, server failure, negative prices, changed denominators, evidence, diagrams and narrow-screen layout. The browser converts numbers only for display and chart coordinates, never to calculate financial results.
 
-The included GitHub Actions workflow runs the same checks on Linux after publication, using read-only repository permissions and pinned action commits. It has not run until a real workflow result exists.
+The included GitHub Actions workflow runs the same checks on Linux, using read-only repository permissions and pinned action commits. [The initial implementation run passed](https://github.com/harshjoshi23/henkel-energy-decision-workbench/actions/runs/36244908051): 29 Python tests, the production build and 12 browser tests. See the verification record for the tested revision.
 
 See [VERIFICATION.md](VERIFICATION.md) for actual executed results and remaining limitations. A passing local suite does not certify deployment, capacity, a real plant or RIZM's hiring scorecard.
 
