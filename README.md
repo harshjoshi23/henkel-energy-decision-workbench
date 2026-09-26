@@ -1,18 +1,73 @@
 # Energy Decision Workbench
 
-**How would you decide whether a factory should change its energy supply before you have its operating data?**
+**Using less fuel can still increase a factory’s energy bill. This app shows why.**
 
-This companion to a RIZM / Henkel Düsseldorf take-home makes that starting point tangible. The assessment uses public evidence to choose decisions worth investigating. The app lets a reviewer change clearly fictional assumptions, inspect the resulting cost trade-off, and see when changing the baseline would lose money or fail a constraint.
+A factory may get heat and electricity from the same equipment. Changing that equipment can reduce one bill while increasing another. The useful question is whether the **same production and energy needs** can be met at a lower total cost—and whether the alternative is actually possible.
 
-> Heat and electricity share a system. Their costs need the same decision boundary.
+This is a companion to a RIZM / Henkel Düsseldorf take-home assessment: how would you begin investigating energy value at an established industrial site using public information? It connects company and site evidence to two decisions worth investigating, a transparent calculation, and a focused first visit. **All numerical scenarios are fictional. They demonstrate a method, not measured Henkel savings.**
 
-**[Open the live app](https://henkel-energy-decision-workbench.vercel.app/)** · [Assessment entry point](#assessment-entry-point) · [Five-minute walkthrough](#reviewer-walkthrough) · [Architecture](#architecture) · [Verification](VERIFICATION.md)
+**[Open the live app](https://henkel-energy-decision-workbench.vercel.app/)** · [Five-minute walkthrough](#reviewer-walkthrough) · [Assessment reading order](#assessment-entry-point) · [Technical architecture](#architecture) · [Verification record](VERIFICATION.md)
 
-![Actual deployed workbench showing a synthetic coupled-energy result](docs/images/workbench-result.png)
+## What a reviewer can learn
 
-*Actual screenshot of the deployed app. Every modeled value is synthetic; the screen demonstrates the method, not validated Henkel savings.*
+- **How the investigation is prioritized:** existing dryer controls and commissioned heat infrastructure belong in the baseline. A new proposal must add something beyond them.
+- **What changes the decision:** a higher electricity price, limited operating freedom or an equipment constraint can reverse an attractive result.
+- **What is still unknown:** real tariffs, operating rights, performance and production data remain questions for the customer.
+- **How the reasoning can be checked:** the app shows assumptions, calculation steps, evidence and limitations, then exports the exact result for review.
 
-## The decision behind the demonstration
+No coding or energy-industry background is needed for the walkthrough below. Setup, architecture and release details follow it.
+
+![Actual deployed workbench showing a fictional 6 EUR per product tonne result, its assumptions and cost comparison](docs/images/workbench-result.png)
+
+*Actual screenshot of the deployed app. The green result applies only to the displayed fictional assumptions; real feasibility and authority remain unverified.*
+
+## Why heat and electricity belong in one calculation
+
+**CHP** means combined heat and power: equipment that produces useful heat and electricity from fuel. A boiler can supply heat, while electricity can also be purchased from the grid. The diagram shows the teaching example's connections, not Henkel's actual plant layout.
+
+![Fictional energy flows: gas supplies CHP and a boiler; CHP and grid supply electricity; CHP and boiler supply heat](public/diagrams/decision-flow.svg)
+
+Compare two ways to meet the **same** electricity, useful-heat and production needs. The fictional alternative buys 10 MWh less fuel but 7 MWh more electricity. A MWh is 1,000 kilowatt-hours of energy. Whether the change saves money depends on both prices and any additional cost.
+
+| Same fictional service and 20 product tonnes | Baseline A | Alternative B | Value of switching |
+|---|---:|---:|---:|
+| Fuel and electricity each cost 40 EUR/MWh; no additional cost | 4,400 EUR | 4,280 EUR | **+6 EUR per product tonne** |
+| Only electricity rises to 120 EUR/MWh | 5,200 EUR | 5,640 EUR | **−22 EUR per product tonne** |
+
+`EUR per product tonne` means the cost difference divided by matching manufactured output for the same period. It is not a tonne of steam or CO₂. In the second row, the app keeps baseline A; it leaves the alternative's loss visible. A cheaper-looking alternative is also rejected if it cannot meet the stated heat requirement.
+
+**Scope:** this independent demonstration is not RIZM software, a Henkel digital twin, an energy audit or a plant/trading connection. No live LLM runs in the calculation path. The assessment remains readable without the app.
+
+## Reviewer walkthrough
+
+1. **Start with Coupled utilities.** Choose **Base switch**, read the units and fixed service, accept the fictional inputs and calculate. The result is **6 EUR per product tonne**: the same useful heat, electricity and production cost less under the fictional alternative.
+2. **Challenge the result.** Choose **Higher power price**. The alternative now loses **22 EUR per product tonne**, so the toy policy keeps the baseline. Choose **Infeasible switch** to see why a favourable price cannot make an unavailable action valid.
+3. **Open Residual dryer.** Inspect the separate fictional example of a remaining energy gap after existing automatic control. Its base result is **0.34 EUR per product tonne**. Actual customer gaps remain unknown, and this result is **not added** to the coupled-utilities result.
+4. **Follow the evidence.** **Evidence & choices** explains support and unknowns. **How it works** shows the teaching boundary and software architecture. **Verification** executes the actual server-side arithmetic checks; its scope is narrower than a full production certification.
+5. **Take away a reviewable result.** Export **JSON** or **Markdown**. Both contain the same calculated result, inputs, units and evidence context. Editing an input resets acceptance and makes the old result stale; exports stay disabled until the new scenario is accepted and calculated.
+
+The first-visit priority is **one existing utilities operating/dispatch report with its existing definitions**, and **the site utilities / energy operations owner**. These help establish what actually runs and which choices can be changed. If commercial rights determine whether any action is possible, that evidence can replace the report as the first request. Do not bundle every desired dataset into “one request.”
+
+Here, **load-bearing** means the information or person most consequential to the decision. It does not mean software load balancing.
+
+## Assessment entry point
+
+For the take-home itself, start with **README.md in the separately supplied six-file assessment package**, then **writeup.pdf**. The PDFs provide the reading format; the workbook and Python file make the economics inspectable and reproducible.
+
+| Assessment file | What it provides |
+|---|---|
+| **README.md** | Entry point, reading order and tool disclosure. |
+| **writeup.pdf** | The argument: candidate use cases, prioritization, one data request and one stakeholder. |
+| **economics.pdf** | Calculation walkthrough, assumptions, candidate rationale and limitations. |
+| **sources.pdf** | Dated reference records with scope and limitations. |
+| **economics.xlsx** | Editable supporting calculations. |
+| **economics.py** | Reproducible deterministic calculation code. |
+
+**This public repository is the separate companion application.** It does not replace the assessment package. Its [authoritative engine](engine/economics.py), [calculation trace and candidate rationale](engine/economics.md), and [dated source records](evidence/sources.md) are available here in their repository formats. The six assessment filenames above refer to the separately supplied package, not missing files in this app repository.
+
+The separate assessment-repository URL and optional video link have not been supplied, so neither is invented here. The original written assessment predates the companion app; its calculations remain unchanged.
+
+## Why these investigations
 
 | Choice | Plain-English reason |
 |---|---|
@@ -22,48 +77,6 @@ This companion to a RIZM / Henkel Düsseldorf take-home makes that starting poin
 | **One transparent calculator owns the numbers** | Python's Decimal arithmetic produces the costs, comparisons and exports. The interface displays them. A reviewer can trace a conclusion to its inputs and reproduce it without relying on generated prose. |
 
 The documented decision trail also keeps commissioned heat export (C04) inside the coupled case and treats commercial terms (C07) as a dependency. The [ten-candidate rationale](engine/economics.md#candidate-register) explains what was retained or deferred and what evidence would reopen a case.
-
-**Scope:** this is an independent synthetic demonstration, not RIZM software, a Henkel digital twin, an energy audit or a plant/trading connection. No live LLM runs in the calculation path. The assessment remains readable without the app.
-
-## Assessment entry point
-
-For the take-home itself, start with **README.md in the separately supplied six-file assessment package**, then **writeup.md**. That package also contains **economics.xlsx**, **economics.py**, **economics.md** and **sources.md**. The written argument identifies the use cases, one first-visit data request and one stakeholder; the spreadsheet and code expose the method.
-
-This public repository is the companion application. Its [authoritative engine](engine/economics.py), [calculation trace and candidate rationale](engine/economics.md), and [dated source records](evidence/sources.md) are available here. The separate assessment-repository URL and optional video have not been supplied, so no placeholder links are presented. The original assessment edition predates the companion app; its calculations remain unchanged.
-
-## Reviewer walkthrough
-
-1. **Coupled utilities:** choose **Base switch**, read the units and fixed service, accept the fictional inputs and calculate. The question is whether the same useful heat, electricity and product output cost less under the alternative.
-2. Choose **Higher power price**. The signed loss stays visible and the toy policy keeps the baseline. Choose **Infeasible switch** to see why an apparently attractive price cannot make an unavailable action valid.
-3. **Residual dryer:** inspect a separate fictional residual improvement. Existing automatic control is the baseline. This comparison is not added to the coupled result.
-4. **Evidence & choices** explains support and unknowns. **How it works** shows the teaching boundary and software architecture. **Verification** executes the actual server-side arithmetic checks.
-5. Export **JSON** or **Markdown** to take the exact reviewed result with you. Editing an input resets acceptance and makes the old result stale; exports stay disabled until you calculate the new scenario.
-
-The first-visit priority is **one existing utilities operating/dispatch report with its existing definitions**, and **the site utilities / energy operations owner**. If commercial rights determine whether any action is possible, that evidence can replace the report as the first request. Do not bundle every desired dataset into “one request.”
-
-## Start locally
-
-Use Node.js 22.12+ (tested with 22.23.1), npm and Python 3.12+ (standard library only). Python 3.12 is selected for Vercel. No database, API key or model-provider account is needed.
-
-```sh
-npm ci
-npm run dev
-```
-
-Open `http://127.0.0.1:5173`. The command runs a loopback Python API on port 8000 and the frontend on port 5173; Ctrl+C stops both. If your Python executable differs, set `PYTHON_BIN` for that command. `.env.example` lists optional local settings; the app does not load a secrets file or need one.
-
-For the production frontend locally, run these in separate terminals:
-
-```sh
-python3 -B scripts/serve_api.py
-```
-
-```sh
-npm run build
-npm run preview
-```
-
-Open `http://127.0.0.1:4173`. Do not expose the development servers to the public internet.
 
 ## Decisions and economic boundaries
 
@@ -87,8 +100,6 @@ C01 uses a residual gap in **directly purchased** energy per product tonne. When
 ## Architecture
 
 ![Application architecture](public/diagrams/architecture.svg)
-
-![Fictional energy boundary](public/diagrams/decision-flow.svg)
 
 The implementation uses **React + Vite** for static UI assets and Python file-based functions for the API. This is a deliberate simplification of the plan's proposed Next.js frontend: this demo needs no server-rendered pages, JavaScript backend, private workspace or database. It preserves the plan's Python authority and deploys as one Vercel project. The supported [Python file-function interface](https://vercel.com/docs/functions/runtimes/python/api-directory) and [Vite deployment guide](https://vercel.com/docs/frameworks/frontend/vite) were checked during implementation. Hosting smoke tests remain distinct from a local build.
 
@@ -114,6 +125,30 @@ The adapter accepts only versioned, explicitly synthetic requests and exact deci
 A result includes original inputs, units, revision, confirmation scope, calculated metrics, trace, sensitivity, source/method/adapter hashes and actual check results. Hashes identify content; they are not cryptographic signatures or customer authorization. Snapshot IDs identify the calculation inputs and code/evidence revisions; execution timestamps are separate. Nothing is stored on a server or in browser local storage.
 
 Every input edit invalidates prior acceptance and results. In-flight requests are aborted and revision-checked so old responses cannot overwrite newer edits. Unchecking acceptance disables export until reaccepted. The UI requests confirmation, but the public endpoint is not authenticated: this confirmation has no authority beyond a fictional calculation.
+
+## Start locally
+
+Use Node.js 22.12+ (tested with 22.23.1), npm and Python 3.12+ (standard library only). Python 3.12 is selected for Vercel. No database, API key or model-provider account is needed.
+
+```sh
+npm ci
+npm run dev
+```
+
+Open `http://127.0.0.1:5173`. The command runs a loopback Python API on port 8000 and the frontend on port 5173; Ctrl+C stops both. If your Python executable differs, set `PYTHON_BIN` for that command. `.env.example` lists optional local settings; the app does not load a secrets file or need one.
+
+For the production frontend locally, run these in separate terminals:
+
+```sh
+python3 -B scripts/serve_api.py
+```
+
+```sh
+npm run build
+npm run preview
+```
+
+Open `http://127.0.0.1:4173`. Do not expose the development servers to the public internet.
 
 ## Tests and acceptance
 
