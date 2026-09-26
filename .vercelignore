@@ -5,3 +5,4 @@ test-results
 playwright-report
 .local
 **/__pycache__
+dist
