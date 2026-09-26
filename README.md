@@ -8,6 +8,8 @@ This is a companion to a RIZM / Henkel Düsseldorf take-home assessment: how wou
 
 **[Open the live app](https://henkel-energy-decision-workbench.vercel.app/)** · [Five-minute walkthrough](#reviewer-walkthrough) · [Assessment reading order](#assessment-entry-point) · [Technical architecture](#architecture) · [Verification record](VERIFICATION.md)
 
+**[Recorded video introduction (4 min 31 sec)](https://github.com/harshjoshi23/henkel-energy-decision-workbench/releases/tag/assessment-video-2026-09-26)** — Harshvardhan explains the approach and its limitations. The downloadable MP4 is a spoken introduction, not a screen-recorded demo.
+
 ## What a reviewer can learn
 
 - **How the investigation is prioritized:** existing dryer controls and commissioned heat infrastructure belong in the baseline. A new proposal must add something beyond them.
@@ -52,7 +54,7 @@ Here, **load-bearing** means the information or person most consequential to the
 
 ## Assessment entry point
 
-For the take-home itself, start with **README.md in the separately supplied six-file assessment package**, then **writeup.pdf**. The PDFs provide the reading format; the workbook and Python file make the economics inspectable and reproducible.
+For the take-home itself, start with **README.md in the separately supplied seven-file assessment package**, then **writeup.pdf**. The PDFs provide the reading format; the workbook and Python file make the economics inspectable and reproducible.
 
 | Assessment file | What it provides |
 |---|---|
@@ -62,10 +64,11 @@ For the take-home itself, start with **README.md in the separately supplied six-
 | **sources.pdf** | Dated reference records with scope and limitations. |
 | **economics.xlsx** | Editable supporting calculations. |
 | **economics.py** | Reproducible deterministic calculation code. |
+| **assessment-overview.pptx** | Six-slide supporting overview with the energy-flow diagram and synthetic example. |
 
-**This public repository is the separate companion application.** It does not replace the assessment package. Its [authoritative engine](engine/economics.py), [calculation trace and candidate rationale](engine/economics.md), and [dated source records](evidence/sources.md) are available here in their repository formats. The six assessment filenames above refer to the separately supplied package, not missing files in this app repository.
+**This public repository is the separate companion application.** It does not replace the assessment package. Its [authoritative engine](engine/economics.py), [calculation trace and candidate rationale](engine/economics.md), and [dated source records](evidence/sources.md) are available here in their repository formats. The seven assessment filenames above refer to the separately supplied package, not missing files in this app repository.
 
-The separate assessment-repository URL and optional video link have not been supplied, so neither is invented here. The original written assessment predates the companion app; its calculations remain unchanged.
+The separate assessment-repository URL has not been supplied. The video introduction is linked above. The original written assessment predates the companion app; its calculations remain unchanged.
 
 ## Why these investigations
 
